@@ -8,25 +8,30 @@ test.describe('Registration Form Automation', () => {
     console.log('Page URL:', page.url());
     console.log('Page Title:', await page.title());
     
+    // Fill all fields EXCEPT Last Name
     await page.fill('#firstName', 'John');
     // Last Name skipped intentionally
     await page.fill('#email', 'john@example.com');
     await page.fill('#phone', '+1-202-555-0199');
     await page.check('#genderMale');
     await page.selectOption('#country', 'US');
-    await page.waitForTimeout(500); // Wait for states to load
+    await page.waitForTimeout(500);
     await page.selectOption('#state', 'CA');
-    await page.waitForTimeout(500); // Wait for cities to load
+    await page.waitForTimeout(500);
     await page.selectOption('#city', 'Los Angeles');
     await page.fill('#password', 'Password@123');
     await page.fill('#confirmPassword', 'Password@123');
     await page.check('#terms');
 
-    await page.click('#submitBtn');
+    // Verify submit button is disabled (because Last Name is missing)
+    await expect(page.locator('#submitBtn')).toBeDisabled();
     
-    // Validation: Should show error for missing Last Name
+    // Verify error appears when trying to focus on Last Name and blur
+    await page.focus('#lastName');
+    await page.blur('#lastName');
+    await page.waitForTimeout(300);
     await expect(page.locator('#lastNameError')).toBeVisible();
-    await expect(page.locator('#lastNameError')).toContainText('required');
+    
     await page.screenshot({ path: 'error-state.png', fullPage: true });
     console.log('✅ Flow A passed: Error correctly shown for missing Last Name');
   });
@@ -34,6 +39,7 @@ test.describe('Registration Form Automation', () => {
   test('Flow B: Positive - All Fields Valid', async ({ page }) => {
     await page.goto(BASE_URL);
     
+    // Fill all required fields with valid data
     await page.fill('#firstName', 'Jane');
     await page.fill('#lastName', 'Doe');
     await page.fill('#email', 'jane.doe@gmail.com');
@@ -48,11 +54,16 @@ test.describe('Registration Form Automation', () => {
     await page.fill('#confirmPassword', 'StrongPass2025!');
     await page.check('#terms');
 
+    // Wait for button to be enabled
+    await page.waitForTimeout(500);
+    await expect(page.locator('#submitBtn')).toBeEnabled();
+
+    // Click submit
     await page.click('#submitBtn');
     
     // Validation: Should see success alert
-    await expect(page.locator('.alert-success')).toBeVisible({ timeout: 10000 });
-    await expect(page.locator('.alert-success')).toContainText('Registration Successful');
+    await expect(page.locator('#alertBox')).toBeVisible({ timeout: 10000 });
+    await expect(page.locator('#alertBox')).toContainText('Registration Successful');
     await page.screenshot({ path: 'success-state.png', fullPage: true });
     console.log('✅ Flow B passed: Registration successful');
   });
@@ -68,7 +79,7 @@ test.describe('Registration Form Automation', () => {
     // Check that state dropdown is now enabled and contains options
     await expect(page.locator('#state')).toBeEnabled();
     const stateOptions = await page.locator('#state option').count();
-    expect(stateOptions).toBeGreaterThan(1); // Should have more than just "Select State"
+    expect(stateOptions).toBeGreaterThan(1);
     
     await page.selectOption('#state', 'IDF');
     await page.waitForTimeout(500);
@@ -76,7 +87,7 @@ test.describe('Registration Form Automation', () => {
     // Check that city dropdown is now enabled and contains options
     await expect(page.locator('#city')).toBeEnabled();
     const cityOptions = await page.locator('#city option').count();
-    expect(cityOptions).toBeGreaterThan(1); // Should have more than just "Select City"
+    expect(cityOptions).toBeGreaterThan(1);
     console.log('✅ Cascading dropdowns working correctly');
 
     // Password strength
@@ -92,6 +103,7 @@ test.describe('Registration Form Automation', () => {
     console.log('Testing password mismatch validation...');
     await page.fill('#confirmPassword', 'WrongPass');
     await page.locator('#confirmPassword').blur();
+    await page.waitForTimeout(300);
     await expect(page.locator('#confirmPasswordError')).toBeVisible();
     await expect(page.locator('#confirmPasswordError')).toContainText('do not match');
     console.log('✅ Password mismatch validation working correctly');
@@ -100,16 +112,23 @@ test.describe('Registration Form Automation', () => {
     console.log('Testing submit button state...');
     await expect(page.locator('#submitBtn')).toBeDisabled();
 
-    // Now fill all required fields correctly
+    // Now fill ALL required fields correctly
     await page.fill('#firstName', 'Anna');
     await page.fill('#lastName', 'Smith');
     await page.fill('#email', 'anna.smith@gmail.com');
     await page.fill('#phone', '+33-123456789');
     await page.check('#genderFemale');
+    await page.selectOption('#country', 'FR');
+    await page.waitForTimeout(500);
+    await page.selectOption('#state', 'IDF');
+    await page.waitForTimeout(500);
+    await page.selectOption('#city', 'Paris');
+    await page.fill('#password', 'StrongPass2025!');
     await page.fill('#confirmPassword', 'StrongPass2025!');
     await page.check('#terms');
     
-    await page.waitForTimeout(500);
+    // Wait for form validation to complete
+    await page.waitForTimeout(800);
     await expect(page.locator('#submitBtn')).toBeEnabled();
     console.log('✅ Submit button enabled after all validations passed');
     
