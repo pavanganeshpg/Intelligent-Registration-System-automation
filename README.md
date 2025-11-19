@@ -34,6 +34,7 @@ npx cypress run --spec "cypress/e2e/registration.cy.js"
 npx cypress open
 
    or
+
 cd /Users/pavanganesh/Downloads/homework/Cypress-Framework && npx cypress open
 ```
 
