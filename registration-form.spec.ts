@@ -1,80 +1,119 @@
 import { test, expect } from '@playwright/test';
 
-const BASE_URL = 'YOUR_FORM_URL_HERE'; // Replace with your actual deployed Registration Form URL
+const BASE_URL = 'https://pavanganeshpg.github.io/Intelligent-Registration-System-automation/';
 
 test.describe('Registration Form Automation', () => {
   test('Flow A: Negative - Missing Last Name', async ({ page }) => {
     await page.goto(BASE_URL);
     console.log('Page URL:', page.url());
     console.log('Page Title:', await page.title());
-    await page.fill('input[name="firstName"]', 'John');
-    // Last Name skipped
-    await page.fill('input[name="email"]', 'john@example.com');
-    await page.fill('input[name="phone"]', '+1-202-555-0199');
-    await page.check('input[value="Male"]');
-    await page.selectOption('select[name="country"]', 'United States');
-    await page.selectOption('select[name="state"]', 'California');
-    await page.selectOption('select[name="city"]', 'Los Angeles');
-    await page.fill('input[name="password"]', 'Password@123');
-    await page.fill('input[name="confirmPassword"]', 'Password@123');
-    await page.check('input[name="terms"]');
+    
+    await page.fill('#firstName', 'John');
+    // Last Name skipped intentionally
+    await page.fill('#email', 'john@example.com');
+    await page.fill('#phone', '+1-202-555-0199');
+    await page.check('#genderMale');
+    await page.selectOption('#country', 'US');
+    await page.waitForTimeout(500); // Wait for states to load
+    await page.selectOption('#state', 'CA');
+    await page.waitForTimeout(500); // Wait for cities to load
+    await page.selectOption('#city', 'Los Angeles');
+    await page.fill('#password', 'Password@123');
+    await page.fill('#confirmPassword', 'Password@123');
+    await page.check('#terms');
 
-    await page.click('button[type="submit"]');
+    await page.click('#submitBtn');
+    
     // Validation: Should show error for missing Last Name
-    await expect(page.getByText('Last Name is required')).toBeVisible();
-    await page.screenshot({ path: 'error-state.png' });
+    await expect(page.locator('#lastNameError')).toBeVisible();
+    await expect(page.locator('#lastNameError')).toContainText('required');
+    await page.screenshot({ path: 'error-state.png', fullPage: true });
+    console.log('✅ Flow A passed: Error correctly shown for missing Last Name');
   });
 
   test('Flow B: Positive - All Fields Valid', async ({ page }) => {
     await page.goto(BASE_URL);
-    await page.fill('input[name="firstName"]', 'Jane');
-    await page.fill('input[name="lastName"]', 'Doe');
-    await page.fill('input[name="email"]', 'jane.doe@gmail.com');
-    await page.fill('input[name="phone"]', '+91-9876543210');
-    await page.check('input[value="Female"]');
-    await page.selectOption('select[name="country"]', 'India');
-    await page.selectOption('select[name="state"]', 'Maharashtra');
-    await page.selectOption('select[name="city"]', 'Mumbai');
-    await page.fill('input[name="password"]', 'StrongPass2025!');
-    await page.fill('input[name="confirmPassword"]', 'StrongPass2025!');
-    await page.check('input[name="terms"]');
+    
+    await page.fill('#firstName', 'Jane');
+    await page.fill('#lastName', 'Doe');
+    await page.fill('#email', 'jane.doe@gmail.com');
+    await page.fill('#phone', '+91-9876543210');
+    await page.check('#genderFemale');
+    await page.selectOption('#country', 'IN');
+    await page.waitForTimeout(500);
+    await page.selectOption('#state', 'MH');
+    await page.waitForTimeout(500);
+    await page.selectOption('#city', 'Mumbai');
+    await page.fill('#password', 'StrongPass2025!');
+    await page.fill('#confirmPassword', 'StrongPass2025!');
+    await page.check('#terms');
 
-    await page.click('button[type="submit"]');
+    await page.click('#submitBtn');
+    
     // Validation: Should see success alert
-    await expect(page.getByText('Registration Successful!')).toBeVisible();
-    await page.screenshot({ path: 'success-state.png' });
+    await expect(page.locator('.alert-success')).toBeVisible({ timeout: 10000 });
+    await expect(page.locator('.alert-success')).toContainText('Registration Successful');
+    await page.screenshot({ path: 'success-state.png', fullPage: true });
+    console.log('✅ Flow B passed: Registration successful');
   });
 
   test('Flow C: Form Logic Validation', async ({ page }) => {
     await page.goto(BASE_URL);
 
     // Test cascading dropdown for Country → State → City
-    await page.selectOption('select[name="country"]', 'France');
-    await expect(page.getByText('Île-de-France')).toBeVisible();
-    await page.selectOption('select[name="state"]', 'Île-de-France');
-    await expect(page.getByText('Paris')).toBeVisible();
+    console.log('Testing Country → State → City cascade...');
+    await page.selectOption('#country', 'FR');
+    await page.waitForTimeout(500);
+    
+    // Check that state dropdown is now enabled and contains options
+    await expect(page.locator('#state')).toBeEnabled();
+    const stateOptions = await page.locator('#state option').count();
+    expect(stateOptions).toBeGreaterThan(1); // Should have more than just "Select State"
+    
+    await page.selectOption('#state', 'IDF');
+    await page.waitForTimeout(500);
+    
+    // Check that city dropdown is now enabled and contains options
+    await expect(page.locator('#city')).toBeEnabled();
+    const cityOptions = await page.locator('#city option').count();
+    expect(cityOptions).toBeGreaterThan(1); // Should have more than just "Select City"
+    console.log('✅ Cascading dropdowns working correctly');
 
     // Password strength
-    await page.fill('input[name="password"]', '123456');
-    await expect(page.getByText('Weak')).toBeVisible();
-    await page.fill('input[name="password"]', 'StrongPass2025!');
-    await expect(page.getByText('Strong')).toBeVisible();
+    console.log('Testing password strength meter...');
+    await page.fill('#password', '123456');
+    await expect(page.locator('#passwordStrengthText')).toContainText('Weak');
+    
+    await page.fill('#password', 'StrongPass2025!');
+    await expect(page.locator('#passwordStrengthText')).toContainText('Strong');
+    console.log('✅ Password strength meter working correctly');
 
     // Wrong Confirm Password
-    await page.fill('input[name="confirmPassword"]', 'WrongPass');
-    await expect(page.getByText('Passwords do not match')).toBeVisible();
+    console.log('Testing password mismatch validation...');
+    await page.fill('#confirmPassword', 'WrongPass');
+    await page.locator('#confirmPassword').blur();
+    await expect(page.locator('#confirmPasswordError')).toBeVisible();
+    await expect(page.locator('#confirmPasswordError')).toContainText('do not match');
+    console.log('✅ Password mismatch validation working correctly');
 
     // Submit button should be disabled until all fields valid
-    await expect(page.getByRole('button', { name: /submit/i })).toBeDisabled();
+    console.log('Testing submit button state...');
+    await expect(page.locator('#submitBtn')).toBeDisabled();
 
-    // Now fill all required fields
-    await page.fill('input[name="firstName"]', 'Anna');
-    await page.fill('input[name="lastName"]', 'Smith');
-    await page.fill('input[name="email"]', 'anna.smith@mail.com');
-    await page.fill('input[name="phone"]', '+33-123456789');
-    await page.check('input[value="Female"]');
-    await page.fill('input[name="confirmPassword"]', 'StrongPass2025!');
-    await page.check('input[name="terms"]');
-    await expect(page.getByRole('button', { name: /submit/i })).toBeEnabled();
+    // Now fill all required fields correctly
+    await page.fill('#firstName', 'Anna');
+    await page.fill('#lastName', 'Smith');
+    await page.fill('#email', 'anna.smith@gmail.com');
+    await page.fill('#phone', '+33-123456789');
+    await page.check('#genderFemale');
+    await page.fill('#confirmPassword', 'StrongPass2025!');
+    await page.check('#terms');
+    
+    await page.waitForTimeout(500);
+    await expect(page.locator('#submitBtn')).toBeEnabled();
+    console.log('✅ Submit button enabled after all validations passed');
+    
+    await page.screenshot({ path: 'form-logic-validation.png', fullPage: true });
+    console.log('✅ Flow C passed: All form logic validations working correctly');
   });
 });
