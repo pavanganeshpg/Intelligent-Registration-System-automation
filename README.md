@@ -35,7 +35,7 @@ npx cypress open
 
    or
 
-cd /Users/pavanganesh/Downloads/homework/Cypress-Framework && npx cypress open
+cd /Users/homework/Cypress-Framework && npx cypress open
 ```
 
 
