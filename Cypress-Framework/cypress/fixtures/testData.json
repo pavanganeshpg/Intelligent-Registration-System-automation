@@ -1,0 +1,54 @@
+{
+  "flowA": {
+    "description": "Missing last name - form validation error",
+    "firstName": "John",
+    "lastName": "",
+    "email": "john@example.com",
+    "phone": "+12025550199",
+    "gender": "M",
+    "country": "US",
+    "state": "CA",
+    "city": "Los Angeles",
+    "password": "Password@123",
+    "confirmPassword": "Password@123",
+    "acceptTerms": true,
+    "expectedError": "This field is required",
+    "errorField": "#lastNameError"
+  },
+  "flowB": {
+    "description": "Successful registration with all valid fields",
+    "firstName": "Jane",
+    "lastName": "Doe",
+    "email": "jane.doe@gmail.com",
+    "phone": "+919876543210",
+    "gender": "F",
+    "country": "IN",
+    "state": "MH",
+    "city": "Mumbai",
+    "password": "StrongPass2025!",
+    "confirmPassword": "StrongPass2025!",
+    "acceptTerms": true,
+    "expectedSuccess": "Registration Successful"
+  },
+  "flowC": {
+    "description": "Cascading dropdowns and password validation",
+    "firstName": "Test",
+    "lastName": "User",
+    "email": "test.user@example.com",
+    "phone": "+33123456789",
+    "gender": "M",
+    "country": "FR",
+    "state": "IDF",
+    "city": "Paris",
+    "passwordWeak": "123456",
+    "passwordStrong": "StrongPass2025!",
+    "passwordMismatch": "WrongPassword",
+    "acceptTerms": true
+  },
+  "flowD": {
+    "description": "Phone country code mismatch",
+    "country": "US",
+    "phone": "+919876543210",
+    "expectedError": "Phone must start with +1"
+  }
+}

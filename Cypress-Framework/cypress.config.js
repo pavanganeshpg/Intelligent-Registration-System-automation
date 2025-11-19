@@ -96,6 +96,28 @@ module.exports = defineConfig({
     setupNodeEvents(on, config) {
       // implement node event listeners here
 
+      // Custom task to log page URL and title to a file
+      on('task', {
+        logPageInfo(data) {
+          const fs = require('fs');
+          const path = require('path');
+          const reportDir = path.join(__dirname, 'cypress/reports');
+          
+          // Create reports directory if it doesn't exist
+          if (!fs.existsSync(reportDir)) {
+            fs.mkdirSync(reportDir, { recursive: true });
+          }
+
+          const logFile = path.join(reportDir, 'page-info.log');
+          const timestamp = new Date().toISOString();
+          const logEntry = `[${timestamp}] URL: ${data.url}\nTitle: ${data.title}\n---\n`;
+          
+          fs.appendFileSync(logFile, logEntry, 'utf8');
+          console.log(`✓ Logged to ${logFile}`);
+          return true;
+        }
+      });
+
       //Load the testing configuration and environment variables from separate JSON files.
       //we put the baseUrl and envionment specific config settings in settings/env.settings.json
       const environmentName = config.env.environmentName || 'local';

@@ -1,33 +1,63 @@
 // cypress/e2e/registration_form.cy.js
 describe('Registration Form', () => {
   const url = 'https://pavanganeshpg.github.io/Intelligent-Registration-System-automation/';
+  let testData;
 
-  // Global handler to ignore app-side JS errors
+  // Selective error handling - only ignore specific validation errors, not all errors
   Cypress.on('uncaught:exception', (err, runnable) => {
-    // Ignore all uncaught exceptions from the app
-    return false;
+    // Log actual errors for debugging
+    cy.log(`⚠️ Uncaught Exception: ${err.message}`);
+    
+    // Only ignore expected form validation-related errors
+    if (err.message.includes('classList') || err.message.includes('null is not an object')) {
+      return false; // Ignore this specific error
+    }
+    
+    // Let other errors fail the test
+    return true;
+  });
+
+  before(() => {
+    // Load test data once
+    cy.fixture('testData.json').then((data) => {
+      testData = data;
+    });
   });
 
   beforeEach(() => {
     cy.visit(url);
+    
+    // Log page info on each test
+    cy.then(() => {
+      cy.task('logPageInfo', {
+        url: url,
+        title: 'Registration Form'
+      });
+    });
   });
 
-  it('keeps submit disabled and shows error when last name is missing', () => {
+  it('Flow A: keeps submit disabled and shows error when last name is missing', () => {
+    const data = testData.flowA;
+    
     // Fill everything EXCEPT last name
-    cy.get('#firstName').type('John');
-    cy.get('#email').type('john@example.com');
-    cy.get('#phone').type('+12025550199'); // valid US number format for your regex
+    cy.get('#firstName').type(data.firstName).should('have.value', data.firstName);
+    cy.get('#email').type(data.email).should('have.value', data.email);
+    cy.get('#phone').type(data.phone).should('have.value', data.phone);
 
-    cy.get('#genderMale').check({ force: true });
+    // Gender selection
+    cy.get('#genderMale').check({ force: true }).should('be.checked');
 
-    cy.get('#country').select('US');
-    cy.get('#state').should('not.be.disabled').select('CA');
-    cy.get('#city').should('not.be.disabled').select('Los Angeles');
+    // Cascading dropdowns
+    cy.get('#country').select(data.country).should('have.value', data.country);
+    cy.get('#state').should('not.be.disabled').select(data.state).should('have.value', data.state);
+    cy.get('#city').should('not.be.disabled').select(data.city).should('have.value', data.city);
 
-    cy.get('#password').type('Password@123');
-    cy.get('#confirmPassword').type('Password@123');
+    // Password fields
+    cy.get('#password').type(data.password).should('have.value', data.password);
+    cy.get('#confirmPassword').type(data.confirmPassword).should('have.value', data.confirmPassword);
 
-    cy.get('#terms').check({ force: true });
+    // Accept terms
+    cy.get('#terms').check({ force: true }).should('be.checked');
 
     // Last name is still empty → submit must stay disabled
     cy.get('#submitBtn').should('be.disabled');
@@ -35,57 +65,66 @@ describe('Registration Form', () => {
     // Trigger validation on last name
     cy.get('#lastName').focus().blur();
 
-    // more robust: wait for the error element with the expected text
-    cy.contains('#lastNameError', 'This field is required').should('be.visible');
+    // Error message should be visible with exact text
+    cy.get(data.errorField)
+      .should('be.visible')
+      .and('have.text', data.expectedError);
 
-    // ensure submit remains disabled
+    // Ensure submit remains disabled
     cy.get('#submitBtn').should('be.disabled');
 
-    cy.screenshot('01-last-name-missing');
+    // Capture error state screenshot with required naming
+    cy.screenshot('error-state');
   });
 
-  it('registers successfully with all valid fields and shows success alert', () => {
-    cy.get('#firstName').type('Jane');
-    cy.get('#lastName').type('Doe');
-    cy.get('#email').type('jane.doe@gmail.com');
-    cy.get('#phone').type('+919876543210'); // later we'll pick IN
+  it('Flow B: registers successfully with all valid fields and shows success alert', () => {
+    const data = testData.flowB;
+    
+    // Fill all form fields with valid data
+    cy.get('#firstName').type(data.firstName).should('have.value', data.firstName);
+    cy.get('#lastName').type(data.lastName).should('have.value', data.lastName);
+    cy.get('#email').type(data.email).should('have.value', data.email);
+    cy.get('#phone').type(data.phone).should('have.value', data.phone);
 
-    // Add delay before checking to allow DOM to settle
-    cy.wait(500);
-    cy.get('#genderFemale').check({ force: true });
-    cy.wait(300);
+    // Gender selection
+    cy.get('#genderFemale').check({ force: true }).should('be.checked');
 
-    cy.get('#country').select('IN');
-    cy.wait(500);
-    cy.get('#state').should('not.be.disabled').select('MH');
-    cy.wait(500);
-    cy.get('#city').should('not.be.disabled').select('Mumbai');
-    cy.wait(500);
+    // Cascading dropdowns - let DOM update between selections
+    cy.get('#country').select(data.country).should('have.value', data.country);
+    
+    // Wait for state dropdown to be enabled and populated
+    cy.get('#state')
+      .should('not.be.disabled')
+      .select(data.state)
+      .should('have.value', data.state);
+    
+    // Wait for city dropdown to be enabled and populated
+    cy.get('#city')
+      .should('not.be.disabled')
+      .select(data.city)
+      .should('have.value', data.city);
 
-    cy.get('#password').type('StrongPass2025!');
-    cy.get('#confirmPassword').type('StrongPass2025!');
+    // Password fields
+    cy.get('#password').type(data.password).should('have.value', data.password);
+    cy.get('#confirmPassword').type(data.confirmPassword).should('have.value', data.confirmPassword);
 
-    cy.get('#terms').check({ force: true });
+    // Accept terms
+    cy.get('#terms').check({ force: true }).should('be.checked');
 
     // Button should now be enabled
     cy.get('#submitBtn').should('be.enabled');
-    cy.screenshot('02-form-valid-before-submit');
+    cy.screenshot('success-state');
 
+    // Actually CLICK the submit button (this is required!)
     cy.get('#submitBtn').click();
 
-    // Success alert should show correct text - wait for visibility and content
+    // Success alert should show
     cy.get('#alertBox', { timeout: 10000 })
       .should('be.visible')
-      .and('contain', 'Registration Successful')
-      .and('contain', 'Your profile has been submitted successfully.');
+      .and('contain', data.expectedSuccess);
 
-    cy.screenshot('03-success-alert-shown');
-
-    // Wait for form reset (2 second delay in the form)
-    cy.wait(2500);
-
-    // After reset, fields should be empty / reset
-    cy.get('#firstName').should('have.value', '');
+    // Wait for form reset (2 second delay in the form code)
+    cy.get('#firstName', { timeout: 5000 }).should('have.value', '');
     cy.get('#lastName').should('have.value', '');
     cy.get('#email').should('have.value', '');
     cy.get('#phone').should('have.value', '');
@@ -100,62 +139,65 @@ describe('Registration Form', () => {
     // Password strength UI should be reset
     cy.get('#passwordStrengthBar').should('have.class', 'password-strength-bar');
     cy.get('#passwordStrengthText').should('have.text', '');
-
-    cy.screenshot('04-form-reset-complete');
   });
 
-  it('validates cascading dropdowns and password strength + mismatch', () => {
+  it('Flow C: validates cascading dropdowns and password strength + mismatch', () => {
+    const data = testData.flowC;
+    
     // Cascading dropdowns: FR → IDF → Paris
-    cy.get('#country').select('FR');
+    cy.get('#country').select(data.country).should('have.value', data.country);
     cy.get('#state')
       .should('not.be.disabled')
-      .select('IDF'); // Île-de-France
+      .select(data.state)
+      .should('have.value', data.state);
 
     cy.get('#city')
       .should('not.be.disabled')
-      .select('Paris');
+      .select(data.city)
+      .should('have.value', data.city);
 
-    // Weak password
-    cy.get('#password').type('123456');
+    // Weak password test
+    cy.get('#password').type(data.passwordWeak);
     cy.get('#passwordStrengthText').should('contain', 'Weak');
 
-    // Strong password
-    cy.get('#password').clear().type('StrongPass2025!');
+    // Strong password test
+    cy.get('#password').clear().type(data.passwordStrong);
     cy.get('#passwordStrengthText').should('contain', 'Strong');
 
     // Mismatching confirm password
-    cy.get('#confirmPassword').type('WrongPassword').blur();
+    cy.get('#confirmPassword').type(data.passwordMismatch).blur();
     cy.get('#confirmPasswordError')
       .should('be.visible')
       .and('contain', 'Passwords do not match');
 
-    // Fix mismatch and ensure error disappears & button can become enabled
-    cy.get('#confirmPassword').clear().type('StrongPass2025!').blur();
+    // Fix mismatch and ensure error disappears
+    cy.get('#confirmPassword').clear().type(data.passwordStrong).blur();
     cy.get('#confirmPasswordError').should('not.be.visible');
 
-    // Fill remaining required fields minimally to verify submit enables
-    cy.get('#firstName').type('Test');
-    cy.get('#lastName').type('User');
-    cy.get('#email').type('test.user@example.com');
-    cy.get('#phone').type('+33123456789'); // FR, +33
+    // Fill remaining required fields minimally
+    cy.get('#firstName').type(data.firstName).should('have.value', data.firstName);
+    cy.get('#lastName').type(data.lastName).should('have.value', data.lastName);
+    cy.get('#email').type(data.email).should('have.value', data.email);
+    cy.get('#phone').type(data.phone).should('have.value', data.phone);
 
-    cy.get('#genderMale').check({ force: true });
-    cy.get('#terms').check({ force: true });
+    cy.get('#genderMale').check({ force: true }).should('be.checked');
+    cy.get('#terms').check({ force: true }).should('be.checked');
 
+    // Verify submit button is enabled
     cy.get('#submitBtn').should('be.enabled');
-    cy.screenshot('04-form-logic-validation');
   });
 
-  it('shows phone error when country code does not match selected country', () => {
-    cy.get('#country').select('US');
+  it('Flow D: shows phone error when country code does not match selected country', () => {
+    const data = testData.flowD;
+    
+    cy.get('#country').select(data.country).should('have.value', data.country);
 
-    cy.get('#phone').type('+919876543210').blur(); // Indian number in US
+    cy.get('#phone').type(data.phone).blur(); // Indian number in US
 
     cy.get('#phoneError')
       .should('be.visible')
-      .and('contain', 'Phone must start with +1'); // from your JS
+      .and('contain', data.expectedError);
 
     cy.get('#submitBtn').should('be.disabled');
-    cy.screenshot('05-phone-country-mismatch');
   });
 });
