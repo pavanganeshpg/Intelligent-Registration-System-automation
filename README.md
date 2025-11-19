@@ -32,7 +32,11 @@ npx cypress run --spec "cypress/e2e/registration.cy.js"
 **Run tests with UI (interactive mode):**
 ```bash
 npx cypress open
+
+   or
+cd /Users/pavanganesh/Downloads/homework/Cypress-Framework && npx cypress open
 ```
+
 
 **Run specific test:**
 ```bash
