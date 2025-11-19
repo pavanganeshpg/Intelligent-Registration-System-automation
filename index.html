@@ -396,7 +396,7 @@
             'getnada.com', 'mohmal.com', 'trashmail.com', 'fakeinbox.com'
         ];
 
-        // Country phone codes
+        // Country phone codes - Expanded
         const phoneCountryCodes = {
             'US': ['+1'],
             'IN': ['+91'],
@@ -407,54 +407,212 @@
             'FR': ['+33'],
             'JP': ['+81'],
             'CN': ['+86'],
-            'BR': ['+55']
+            'BR': ['+55'],
+            'MX': ['+52'],
+            'IT': ['+39'],
+            'ES': ['+34'],
+            'NL': ['+31'],
+            'SG': ['+65'],
+            'AE': ['+971']
         };
 
-        // Location data
+        // Location data - Expanded with more countries, states, and cities
         const locationData = {
             'US': {
                 name: 'United States',
                 states: {
-                    'CA': { name: 'California', cities: ['Los Angeles', 'San Francisco', 'San Diego', 'Sacramento'] },
-                    'NY': { name: 'New York', cities: ['New York City', 'Buffalo', 'Rochester', 'Albany'] },
-                    'TX': { name: 'Texas', cities: ['Houston', 'Dallas', 'Austin', 'San Antonio'] },
-                    'FL': { name: 'Florida', cities: ['Miami', 'Orlando', 'Tampa', 'Jacksonville'] }
+                    'AL': { name: 'Alabama', cities: ['Birmingham', 'Montgomery', 'Mobile', 'Huntsville', 'Tuscaloosa'] },
+                    'AK': { name: 'Alaska', cities: ['Anchorage', 'Fairbanks', 'Juneau', 'Sitka', 'Ketchikan'] },
+                    'AZ': { name: 'Arizona', cities: ['Phoenix', 'Tucson', 'Mesa', 'Chandler', 'Scottsdale'] },
+                    'AR': { name: 'Arkansas', cities: ['Little Rock', 'Fort Smith', 'Fayetteville', 'Springdale', 'Jonesboro'] },
+                    'CA': { name: 'California', cities: ['Los Angeles', 'San Francisco', 'San Diego', 'Sacramento', 'San Jose', 'Fresno', 'Oakland'] },
+                    'CO': { name: 'Colorado', cities: ['Denver', 'Colorado Springs', 'Aurora', 'Fort Collins', 'Boulder'] },
+                    'CT': { name: 'Connecticut', cities: ['Hartford', 'New Haven', 'Stamford', 'Bridgeport', 'Waterbury'] },
+                    'FL': { name: 'Florida', cities: ['Miami', 'Orlando', 'Tampa', 'Jacksonville', 'Fort Lauderdale', 'Tallahassee'] },
+                    'GA': { name: 'Georgia', cities: ['Atlanta', 'Augusta', 'Columbus', 'Savannah', 'Athens'] },
+                    'IL': { name: 'Illinois', cities: ['Chicago', 'Aurora', 'Naperville', 'Rockford', 'Springfield'] },
+                    'MA': { name: 'Massachusetts', cities: ['Boston', 'Worcester', 'Springfield', 'Cambridge', 'Lowell'] },
+                    'NY': { name: 'New York', cities: ['New York City', 'Buffalo', 'Rochester', 'Albany', 'Syracuse', 'Yonkers'] },
+                    'TX': { name: 'Texas', cities: ['Houston', 'Dallas', 'Austin', 'San Antonio', 'Fort Worth', 'El Paso'] },
+                    'WA': { name: 'Washington', cities: ['Seattle', 'Spokane', 'Tacoma', 'Vancouver', 'Bellevue'] }
                 }
             },
             'IN': {
                 name: 'India',
                 states: {
-                    'MH': { name: 'Maharashtra', cities: ['Mumbai', 'Pune', 'Nagpur', 'Nashik'] },
-                    'DL': { name: 'Delhi', cities: ['New Delhi', 'Central Delhi', 'North Delhi', 'South Delhi'] },
-                    'KA': { name: 'Karnataka', cities: ['Bangalore', 'Mysore', 'Hubli', 'Mangalore'] },
-                    'TN': { name: 'Tamil Nadu', cities: ['Chennai', 'Coimbatore', 'Madurai', 'Tiruchirappalli'] }
+                    'AP': { name: 'Andhra Pradesh', cities: ['Visakhapatnam', 'Vijayawada', 'Guntur', 'Nellore', 'Tirupati'] },
+                    'AR': { name: 'Arunachal Pradesh', cities: ['Itanagar', 'Naharlagun', 'Pasighat', 'Tawang', 'Ziro'] },
+                    'AS': { name: 'Assam', cities: ['Guwahati', 'Silchar', 'Dibrugarh', 'Jorhat', 'Nagaon'] },
+                    'BR': { name: 'Bihar', cities: ['Patna', 'Gaya', 'Bhagalpur', 'Muzaffarpur', 'Purnia'] },
+                    'CG': { name: 'Chhattisgarh', cities: ['Raipur', 'Bhilai', 'Bilaspur', 'Korba', 'Durg'] },
+                    'DL': { name: 'Delhi', cities: ['New Delhi', 'Central Delhi', 'North Delhi', 'South Delhi', 'East Delhi', 'West Delhi'] },
+                    'GA': { name: 'Goa', cities: ['Panaji', 'Margao', 'Vasco da Gama', 'Mapusa', 'Ponda'] },
+                    'GJ': { name: 'Gujarat', cities: ['Ahmedabad', 'Surat', 'Vadodara', 'Rajkot', 'Bhavnagar'] },
+                    'HR': { name: 'Haryana', cities: ['Gurgaon', 'Faridabad', 'Panipat', 'Ambala', 'Karnal'] },
+                    'HP': { name: 'Himachal Pradesh', cities: ['Shimla', 'Dharamshala', 'Solan', 'Mandi', 'Kullu'] },
+                    'JK': { name: 'Jammu and Kashmir', cities: ['Srinagar', 'Jammu', 'Anantnag', 'Baramulla', 'Udhampur'] },
+                    'JH': { name: 'Jharkhand', cities: ['Ranchi', 'Jamshedpur', 'Dhanbad', 'Bokaro', 'Giridih'] },
+                    'KA': { name: 'Karnataka', cities: ['Bangalore', 'Mysore', 'Hubli', 'Mangalore', 'Belgaum', 'Davangere'] },
+                    'KL': { name: 'Kerala', cities: ['Thiruvananthapuram', 'Kochi', 'Kozhikode', 'Thrissur', 'Kollam'] },
+                    'MP': { name: 'Madhya Pradesh', cities: ['Bhopal', 'Indore', 'Gwalior', 'Jabalpur', 'Ujjain'] },
+                    'MH': { name: 'Maharashtra', cities: ['Mumbai', 'Pune', 'Nagpur', 'Nashik', 'Aurangabad', 'Thane'] },
+                    'MN': { name: 'Manipur', cities: ['Imphal', 'Thoubal', 'Bishnupur', 'Churachandpur', 'Ukhrul'] },
+                    'OR': { name: 'Odisha', cities: ['Bhubaneswar', 'Cuttack', 'Rourkela', 'Puri', 'Berhampur'] },
+                    'PB': { name: 'Punjab', cities: ['Chandigarh', 'Ludhiana', 'Amritsar', 'Jalandhar', 'Patiala'] },
+                    'RJ': { name: 'Rajasthan', cities: ['Jaipur', 'Jodhpur', 'Udaipur', 'Kota', 'Ajmer', 'Bikaner'] },
+                    'TN': { name: 'Tamil Nadu', cities: ['Chennai', 'Coimbatore', 'Madurai', 'Tiruchirappalli', 'Salem', 'Tiruppur'] },
+                    'TG': { name: 'Telangana', cities: ['Hyderabad', 'Warangal', 'Nizamabad', 'Karimnagar', 'Khammam'] },
+                    'UP': { name: 'Uttar Pradesh', cities: ['Lucknow', 'Kanpur', 'Agra', 'Varanasi', 'Allahabad', 'Meerut'] },
+                    'UK': { name: 'Uttarakhand', cities: ['Dehradun', 'Haridwar', 'Roorkee', 'Nainital', 'Rishikesh'] },
+                    'WB': { name: 'West Bengal', cities: ['Kolkata', 'Howrah', 'Durgapur', 'Asansol', 'Siliguri'] }
                 }
             },
             'GB': {
                 name: 'United Kingdom',
                 states: {
-                    'ENG': { name: 'England', cities: ['London', 'Manchester', 'Birmingham', 'Liverpool'] },
-                    'SCT': { name: 'Scotland', cities: ['Edinburgh', 'Glasgow', 'Aberdeen', 'Dundee'] },
-                    'WLS': { name: 'Wales', cities: ['Cardiff', 'Swansea', 'Newport', 'Wrexham'] },
-                    'NIR': { name: 'Northern Ireland', cities: ['Belfast', 'Derry', 'Lisburn', 'Newry'] }
+                    'ENG': { name: 'England', cities: ['London', 'Manchester', 'Birmingham', 'Liverpool', 'Leeds', 'Sheffield', 'Bristol', 'Newcastle'] },
+                    'SCT': { name: 'Scotland', cities: ['Edinburgh', 'Glasgow', 'Aberdeen', 'Dundee', 'Inverness', 'Stirling'] },
+                    'WLS': { name: 'Wales', cities: ['Cardiff', 'Swansea', 'Newport', 'Wrexham', 'Barry', 'Rhyl'] },
+                    'NIR': { name: 'Northern Ireland', cities: ['Belfast', 'Derry', 'Lisburn', 'Newry', 'Armagh', 'Bangor'] }
                 }
             },
             'CA': {
                 name: 'Canada',
                 states: {
-                    'ON': { name: 'Ontario', cities: ['Toronto', 'Ottawa', 'Mississauga', 'Hamilton'] },
-                    'QC': { name: 'Quebec', cities: ['Montreal', 'Quebec City', 'Laval', 'Gatineau'] },
-                    'BC': { name: 'British Columbia', cities: ['Vancouver', 'Victoria', 'Surrey', 'Burnaby'] },
-                    'AB': { name: 'Alberta', cities: ['Calgary', 'Edmonton', 'Red Deer', 'Lethbridge'] }
+                    'AB': { name: 'Alberta', cities: ['Calgary', 'Edmonton', 'Red Deer', 'Lethbridge', 'St. Albert'] },
+                    'BC': { name: 'British Columbia', cities: ['Vancouver', 'Victoria', 'Surrey', 'Burnaby', 'Richmond', 'Kelowna'] },
+                    'MB': { name: 'Manitoba', cities: ['Winnipeg', 'Brandon', 'Steinbach', 'Thompson', 'Portage la Prairie'] },
+                    'NB': { name: 'New Brunswick', cities: ['Fredericton', 'Moncton', 'Saint John', 'Dieppe', 'Miramichi'] },
+                    'NL': { name: 'Newfoundland and Labrador', cities: ['St. Johns', 'Mount Pearl', 'Corner Brook', 'Conception Bay South'] },
+                    'NS': { name: 'Nova Scotia', cities: ['Halifax', 'Dartmouth', 'Sydney', 'Truro', 'New Glasgow'] },
+                    'ON': { name: 'Ontario', cities: ['Toronto', 'Ottawa', 'Mississauga', 'Hamilton', 'London', 'Kitchener'] },
+                    'PE': { name: 'Prince Edward Island', cities: ['Charlottetown', 'Summerside', 'Stratford', 'Cornwall'] },
+                    'QC': { name: 'Quebec', cities: ['Montreal', 'Quebec City', 'Laval', 'Gatineau', 'Longueuil', 'Sherbrooke'] },
+                    'SK': { name: 'Saskatchewan', cities: ['Regina', 'Saskatoon', 'Prince Albert', 'Moose Jaw', 'Swift Current'] }
                 }
             },
             'AU': {
                 name: 'Australia',
                 states: {
-                    'NSW': { name: 'New South Wales', cities: ['Sydney', 'Newcastle', 'Wollongong', 'Central Coast'] },
-                    'VIC': { name: 'Victoria', cities: ['Melbourne', 'Geelong', 'Ballarat', 'Bendigo'] },
-                    'QLD': { name: 'Queensland', cities: ['Brisbane', 'Gold Coast', 'Cairns', 'Townsville'] },
-                    'WA': { name: 'Western Australia', cities: ['Perth', 'Fremantle', 'Mandurah', 'Bunbury'] }
+                    'NSW': { name: 'New South Wales', cities: ['Sydney', 'Newcastle', 'Wollongong', 'Central Coast', 'Maitland', 'Tamworth'] },
+                    'VIC': { name: 'Victoria', cities: ['Melbourne', 'Geelong', 'Ballarat', 'Bendigo', 'Shepparton', 'Wodonga'] },
+                    'QLD': { name: 'Queensland', cities: ['Brisbane', 'Gold Coast', 'Cairns', 'Townsville', 'Toowoomba', 'Mackay'] },
+                    'WA': { name: 'Western Australia', cities: ['Perth', 'Fremantle', 'Mandurah', 'Bunbury', 'Albany', 'Kalgoorlie'] },
+                    'SA': { name: 'South Australia', cities: ['Adelaide', 'Mount Gambier', 'Whyalla', 'Murray Bridge', 'Port Lincoln'] },
+                    'TAS': { name: 'Tasmania', cities: ['Hobart', 'Launceston', 'Devonport', 'Burnie', 'Kingston'] },
+                    'NT': { name: 'Northern Territory', cities: ['Darwin', 'Alice Springs', 'Palmerston', 'Katherine', 'Nhulunbuy'] },
+                    'ACT': { name: 'Australian Capital Territory', cities: ['Canberra', 'Belconnen', 'Tuggeranong', 'Weston Creek'] }
+                }
+            },
+            'DE': {
+                name: 'Germany',
+                states: {
+                    'BW': { name: 'Baden-Württemberg', cities: ['Stuttgart', 'Mannheim', 'Karlsruhe', 'Freiburg', 'Heidelberg'] },
+                    'BY': { name: 'Bavaria', cities: ['Munich', 'Nuremberg', 'Augsburg', 'Regensburg', 'Würzburg'] },
+                    'BE': { name: 'Berlin', cities: ['Berlin'] },
+                    'BB': { name: 'Brandenburg', cities: ['Potsdam', 'Cottbus', 'Brandenburg', 'Frankfurt (Oder)'] },
+                    'HH': { name: 'Hamburg', cities: ['Hamburg'] },
+                    'HE': { name: 'Hesse', cities: ['Frankfurt', 'Wiesbaden', 'Kassel', 'Darmstadt', 'Offenbach'] },
+                    'NW': { name: 'North Rhine-Westphalia', cities: ['Cologne', 'Düsseldorf', 'Dortmund', 'Essen', 'Bonn'] }
+                }
+            },
+            'FR': {
+                name: 'France',
+                states: {
+                    'IDF': { name: 'Île-de-France', cities: ['Paris', 'Versailles', 'Boulogne-Billancourt', 'Saint-Denis', 'Argenteuil'] },
+                    'ARA': { name: 'Auvergne-Rhône-Alpes', cities: ['Lyon', 'Grenoble', 'Saint-Étienne', 'Clermont-Ferrand', 'Annecy'] },
+                    'BFC': { name: 'Bourgogne-Franche-Comté', cities: ['Dijon', 'Besançon', 'Belfort', 'Chalon-sur-Saône'] },
+                    'BRE': { name: 'Brittany', cities: ['Rennes', 'Brest', 'Quimper', 'Lorient', 'Vannes'] },
+                    'NAQ': { name: 'Nouvelle-Aquitaine', cities: ['Bordeaux', 'Limoges', 'Poitiers', 'La Rochelle', 'Pau'] },
+                    'OCC': { name: 'Occitanie', cities: ['Toulouse', 'Montpellier', 'Nîmes', 'Perpignan', 'Béziers'] },
+                    'PAC': { name: 'Provence-Alpes-Côte dAzur', cities: ['Marseille', 'Nice', 'Toulon', 'Aix-en-Provence', 'Cannes'] }
+                }
+            },
+            'JP': {
+                name: 'Japan',
+                states: {
+                    'TKY': { name: 'Tokyo', cities: ['Shinjuku', 'Shibuya', 'Minato', 'Chiyoda', 'Setagaya'] },
+                    'OSA': { name: 'Osaka', cities: ['Osaka', 'Sakai', 'Higashiosaka', 'Hirakata', 'Toyonaka'] },
+                    'KYO': { name: 'Kyoto', cities: ['Kyoto', 'Uji', 'Kameoka', 'Joyo', 'Nagaokakyo'] },
+                    'HOK': { name: 'Hokkaido', cities: ['Sapporo', 'Asahikawa', 'Hakodate', 'Kushiro', 'Obihiro'] },
+                    'FUK': { name: 'Fukuoka', cities: ['Fukuoka', 'Kitakyushu', 'Kurume', 'Omuta', 'Iizuka'] }
+                }
+            },
+            'CN': {
+                name: 'China',
+                states: {
+                    'BJ': { name: 'Beijing', cities: ['Beijing', 'Haidian', 'Chaoyang', 'Fengtai', 'Shijingshan'] },
+                    'SH': { name: 'Shanghai', cities: ['Shanghai', 'Pudong', 'Minhang', 'Baoshan', 'Jiading'] },
+                    'GD': { name: 'Guangdong', cities: ['Guangzhou', 'Shenzhen', 'Dongguan', 'Foshan', 'Zhongshan'] },
+                    'ZJ': { name: 'Zhejiang', cities: ['Hangzhou', 'Ningbo', 'Wenzhou', 'Shaoxing', 'Huzhou'] },
+                    'JS': { name: 'Jiangsu', cities: ['Nanjing', 'Suzhou', 'Wuxi', 'Changzhou', 'Nantong'] }
+                }
+            },
+            'BR': {
+                name: 'Brazil',
+                states: {
+                    'SP': { name: 'São Paulo', cities: ['São Paulo', 'Campinas', 'Santos', 'São José dos Campos', 'Ribeirão Preto'] },
+                    'RJ': { name: 'Rio de Janeiro', cities: ['Rio de Janeiro', 'Niterói', 'Duque de Caxias', 'Nova Iguaçu'] },
+                    'MG': { name: 'Minas Gerais', cities: ['Belo Horizonte', 'Uberlândia', 'Contagem', 'Juiz de Fora'] },
+                    'BA': { name: 'Bahia', cities: ['Salvador', 'Feira de Santana', 'Vitória da Conquista', 'Camaçari'] },
+                    'PR': { name: 'Paraná', cities: ['Curitiba', 'Londrina', 'Maringá', 'Ponta Grossa', 'Cascavel'] }
+                }
+            },
+            'MX': {
+                name: 'Mexico',
+                states: {
+                    'CMX': { name: 'Mexico City', cities: ['Mexico City', 'Iztapalapa', 'Gustavo A. Madero', 'Coyoacán'] },
+                    'JAL': { name: 'Jalisco', cities: ['Guadalajara', 'Zapopan', 'Tlaquepaque', 'Tonalá', 'Puerto Vallarta'] },
+                    'NLE': { name: 'Nuevo León', cities: ['Monterrey', 'Guadalupe', 'San Nicolás de los Garza', 'Apodaca'] },
+                    'PUE': { name: 'Puebla', cities: ['Puebla', 'Tehuacán', 'San Martín Texmelucan', 'Atlixco'] },
+                    'GTO': { name: 'Guanajuato', cities: ['León', 'Irapuato', 'Celaya', 'Salamanca', 'Guanajuato'] }
+                }
+            },
+            'IT': {
+                name: 'Italy',
+                states: {
+                    'LZ': { name: 'Lazio', cities: ['Rome', 'Latina', 'Frosinone', 'Viterbo', 'Rieti'] },
+                    'LM': { name: 'Lombardy', cities: ['Milan', 'Bergamo', 'Brescia', 'Monza', 'Como'] },
+                    'CM': { name: 'Campania', cities: ['Naples', 'Salerno', 'Caserta', 'Benevento', 'Avellino'] },
+                    'SC': { name: 'Sicily', cities: ['Palermo', 'Catania', 'Messina', 'Syracuse', 'Marsala'] },
+                    'VC': { name: 'Veneto', cities: ['Venice', 'Verona', 'Padua', 'Vicenza', 'Treviso'] }
+                }
+            },
+            'ES': {
+                name: 'Spain',
+                states: {
+                    'MD': { name: 'Madrid', cities: ['Madrid', 'Móstoles', 'Alcalá de Henares', 'Fuenlabrada', 'Getafe'] },
+                    'CT': { name: 'Catalonia', cities: ['Barcelona', 'L\'Hospitalet', 'Badalona', 'Terrassa', 'Sabadell'] },
+                    'AN': { name: 'Andalusia', cities: ['Seville', 'Málaga', 'Córdoba', 'Granada', 'Jerez'] },
+                    'VC': { name: 'Valencia', cities: ['Valencia', 'Alicante', 'Elche', 'Castellón', 'Torrevieja'] },
+                    'PV': { name: 'Basque Country', cities: ['Bilbao', 'Vitoria-Gasteiz', 'San Sebastián', 'Barakaldo'] }
+                }
+            },
+            'NL': {
+                name: 'Netherlands',
+                states: {
+                    'NH': { name: 'North Holland', cities: ['Amsterdam', 'Haarlem', 'Zaanstad', 'Alkmaar', 'Haarlemmermeer'] },
+                    'ZH': { name: 'South Holland', cities: ['Rotterdam', 'The Hague', 'Leiden', 'Dordrecht', 'Zoetermeer'] },
+                    'NB': { name: 'North Brabant', cities: ['Eindhoven', 'Tilburg', 'Breda', '\'s-Hertogenbosch', 'Helmond'] },
+                    'UT': { name: 'Utrecht', cities: ['Utrecht', 'Amersfoort', 'Nieuwegein', 'Veenendaal', 'Zeist'] }
+                }
+            },
+            'SG': {
+                name: 'Singapore',
+                states: {
+                    'CE': { name: 'Central', cities: ['Orchard', 'Marina Bay', 'Chinatown', 'Little India', 'Bugis'] },
+                    'EA': { name: 'East', cities: ['Bedok', 'Tampines', 'Pasir Ris', 'Changi', 'Simei'] },
+                    'NO': { name: 'North', cities: ['Yishun', 'Woodlands', 'Sembawang', 'Admiralty', 'Marsiling'] },
+                    'WE': { name: 'West', cities: ['Jurong', 'Clementi', 'Bukit Batok', 'Choa Chu Kang', 'Tuas'] }
+                }
+            },
+            'AE': {
+                name: 'United Arab Emirates',
+                states: {
+                    'DU': { name: 'Dubai', cities: ['Dubai', 'Deira', 'Bur Dubai', 'Jumeirah', 'Dubai Marina'] },
+                    'AZ': { name: 'Abu Dhabi', cities: ['Abu Dhabi', 'Al Ain', 'Khalifa City', 'Ruwais', 'Madinat Zayed'] },
+                    'SH': { name: 'Sharjah', cities: ['Sharjah', 'Kalba', 'Khor Fakkan', 'Dibba Al-Hisn'] },
+                    'AJ': { name: 'Ajman', cities: ['Ajman', 'Manama', 'Masfout'] }
                 }
             }
         };
